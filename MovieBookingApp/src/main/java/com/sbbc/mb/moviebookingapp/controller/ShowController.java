@@ -40,7 +40,7 @@ public class ShowController {
 
     @PatchMapping("/updateshow/{showId}")
     public ResponseEntity<Show> updateShow(@PathVariable UUID showId, @RequestBody ShowDTO showDTO){
-        return ResponseEntity.ok(showService.updateSHow(showId, showDTO));
+        return ResponseEntity.ok(showService.updateShow(showId, showDTO));
     }
 
     @DeleteMapping("/deleteshow/{id}")

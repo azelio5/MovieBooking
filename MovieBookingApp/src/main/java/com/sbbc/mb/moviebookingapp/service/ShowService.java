@@ -1,14 +1,15 @@
 package com.sbbc.mb.moviebookingapp.service;
 
 import com.sbbc.mb.moviebookingapp.dto.ShowDTO;
+import com.sbbc.mb.moviebookingapp.entity.Booking;
 import com.sbbc.mb.moviebookingapp.entity.Movie;
 import com.sbbc.mb.moviebookingapp.entity.Show;
 import com.sbbc.mb.moviebookingapp.entity.Theater;
+import com.sbbc.mb.moviebookingapp.exception.InvalidOperationException;
 import com.sbbc.mb.moviebookingapp.exception.NotFoundException;
 import com.sbbc.mb.moviebookingapp.repository.MovieRepository;
 import com.sbbc.mb.moviebookingapp.repository.ShowRepository;
 import com.sbbc.mb.moviebookingapp.repository.TheaterRepository;
-import com.sbbc.mb.moviebookingapp.util.Util;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class ShowService {
 
     }
 
-    public Show updateSHow(UUID showId, ShowDTO showDTO) {
+    public Show updateShow(UUID showId, ShowDTO showDTO) {
 
         Movie movie = movieRepository.findById(showDTO.getMovieId()).orElseThrow(() -> new NotFoundException("Movie not found with id: " + showDTO.getMovieId()));
         Theater theater = theaterRepository.findById(showDTO.getTheaterId()).orElseThrow(() -> new NotFoundException("Theater not found with id: " + showDTO.getTheaterId()));
@@ -74,9 +75,15 @@ public class ShowService {
     }
 
     public void deleteShow(UUID id) {
-        if (!showRepository.existsById(id)) {
-            throw new NotFoundException("Show not found with id: " + id);
+        Show show = showRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Show not found with id: " + id));
+
+        List<Booking> bookings = show.getBookings();
+
+        // Дополнительная проверка, если нельзя удалять при наличии бронирований:
+        if (!bookings.isEmpty()) {
+            throw new InvalidOperationException("Can't delete show with existing bookings");
         }
-        showRepository.deleteById(id);
+        showRepository.delete(show);
     }
 }
