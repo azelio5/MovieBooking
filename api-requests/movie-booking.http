@@ -1,0 +1,74 @@
+### Register normal user
+POST http://localhost:8080/api/auth/registernormaluser
+Content-Type: application/json
+
+{
+  "username": "Anvar Alekperov",
+  "email": "a.alakbarov@gmail.com",
+  "password": "123456"
+}
+
+### Login User
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "Anvar Alekperov",
+  "password": "123456"
+}
+
+### Login first admin
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "azelio",
+  "password": "3421446"
+}
+
+### Add movie by admin
+
+POST http://localhost:8080/api/movies/addmovie
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA
+
+{
+  "title": "Forest Hump",
+  "description": "Drama about life",
+  "genre": "Drama",
+  "duration": 3,
+  "releaseDate": "1994-01-01",
+  "language": "English"
+}
+
+### Add Theater by admin
+
+POST http://localhost:8080/api/theaters/addtheater
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA
+
+{
+  "name": "Nizami",
+  "location": "Baku",
+  "capacity": 300,
+  "screenType": "IMAX"
+}
+
+### Add Show by admin
+
+POST http://localhost:8080/api/show/createshow
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA
+
+{
+  "showTime": "2025-08-24T08:00",
+  "price": 35,
+  "movieId": "fd6e2d9e-0a3e-49ac-acfd-26e5c0578012",
+  "theaterId": "a8d0c84d-d64c-4b2f-8aa6-b7005187164b"
+}
+
+### Get all shows
+
+GET http://localhost:8080/api/show/allshows
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA

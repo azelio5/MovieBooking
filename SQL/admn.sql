@@ -1,0 +1,3 @@
+insert into users values (UNHEX(REPLACE('550e8400-e29b-41d4-a716-446655440000','-','')), "azgangsta@gmail.com", "$2a$12$nqHtp7Q4.Ek5tcmj6X9btO9aZzSyZYMv78GRq9ttAxEwXVROnpJxi", "azelio");
+insert into user_roles values (UNHEX(REPLACE('550e8400-e29b-41d4-a716-446655440000','-','')), "ROLE_ADMIN");
+insert into user_roles values (UNHEX(REPLACE('550e8400-e29b-41d4-a716-446655440000','-','')), "ROLE_USER");

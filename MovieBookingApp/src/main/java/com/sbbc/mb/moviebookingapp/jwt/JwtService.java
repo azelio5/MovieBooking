@@ -2,13 +2,18 @@ package com.sbbc.mb.moviebookingapp.jwt;
 
 import com.sbbc.mb.moviebookingapp.entity.User;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 
 import javax.crypto.SecretKey;
 import java.security.PublicKey;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -42,11 +47,28 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(User user) {
-        return null;
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
     }
 
-    public boolean isTokenValid(String jwtToken, User userDetails) {
-        return false;
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+            return Jwts.builder().claims(extraClaims).
+                    subject(userDetails.getUsername())
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                    .signWith(getSignInKey()).compact();
+    }
+
+    public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
+        final String username = extractUsername(jwtToken);
+        return (userDetails.getUsername().equals(username) && !isTokenExpired(jwtToken));
+    }
+
+    private boolean isTokenExpired(String jwtToken) {
+        return extractExpiration(jwtToken).before(new Date());
+    }
+
+    private Date extractExpiration(String jwtToken) {
+        return extractClaims(jwtToken, Claims::getExpiration);
     }
 }

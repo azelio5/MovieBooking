@@ -21,7 +21,7 @@ public class TheaterController {
 
     @PostMapping("/addtheater")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Theater> addTheater(TheaterDTO theaterDTO) {
+    public ResponseEntity<Theater> addTheater(@RequestBody TheaterDTO theaterDTO) {
            return ResponseEntity.ok(theaterService.addTheater(theaterDTO));
     }
 

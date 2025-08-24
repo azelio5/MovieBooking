@@ -44,7 +44,7 @@ public class ShowService {
     }
 
     public List<Show> getAllShows() {
-        return showRepository.findAll();
+        return showRepository.findAll().stream().toList();
     }
 
     public List<Show> getAllShowsByMovie(String movie) {

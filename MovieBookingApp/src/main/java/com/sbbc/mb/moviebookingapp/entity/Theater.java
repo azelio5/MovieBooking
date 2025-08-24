@@ -1,10 +1,14 @@
 package com.sbbc.mb.moviebookingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Theater {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @JdbcTypeCode(SqlTypes.BINARY) // Хранение как BINARY(16)
     private UUID id;
     private String name;
     private String location;
@@ -25,5 +30,6 @@ public class Theater {
     private String screenType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "theater")
+    @JsonIgnoreProperties("theater") // разрешаем сериализацию Show
     private List<Show> shows;
 }

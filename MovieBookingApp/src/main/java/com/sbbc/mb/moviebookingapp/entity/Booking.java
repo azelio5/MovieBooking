@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @JdbcTypeCode(SqlTypes.BINARY) // Хранение как BINARY(16)
     private UUID id;
     private Integer numberOfSeats;
     private LocalDateTime bookingTime;
@@ -35,6 +38,6 @@ public class Booking {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "show_id", nullable = false)
+    @JoinColumn(name = "movie_show_id", nullable = false)
     private Show show;
 }
