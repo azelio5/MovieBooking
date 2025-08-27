@@ -10,6 +10,7 @@ import com.sbbc.mb.moviebookingapp.exception.NotFoundException;
 import com.sbbc.mb.moviebookingapp.repository.BookingRepository;
 import com.sbbc.mb.moviebookingapp.repository.ShowRepository;
 import com.sbbc.mb.moviebookingapp.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,22 +33,26 @@ public class BookingService {
     }
 
     public Booking addBooking(BookingDTO bookingDTO) {
+        // Получаем username из токена
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Show show = showRepository.findById(bookingDTO.getShowId()).orElseThrow(() -> new NotFoundException("Show not found with id " + bookingDTO.getShowId()));
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found: " + username));
+
+        Show show = showRepository.findById(bookingDTO.getShowId())
+                .orElseThrow(() -> new NotFoundException("Show not found with id " + bookingDTO.getShowId()));
+
         if (!isSeatsAvailable(show.getId(), bookingDTO.getNumberOfSeats())) {
             throw new InvalidOperationException("No seats available in amount of request: " + bookingDTO.getNumberOfSeats());
         }
         if (bookingDTO.getSeatNumbers().size() != bookingDTO.getNumberOfSeats()) {
-            throw new InvalidOperationException("seat Number and number of seats do not match");
+            throw new InvalidOperationException("Seat number and number of seats do not match");
         }
 
         validateDuplicateSeats(show.getId(), bookingDTO.getSeatNumbers());
 
-        User user = userRepository.findById(bookingDTO.getUserId()).orElseThrow(() -> new NotFoundException("User not found with id " + bookingDTO.getUserId()));
-
-
         Booking booking = Booking.builder()
-                .user(user)
+                .user(user) // ← из токена
                 .show(show)
                 .numberOfSeats(bookingDTO.getNumberOfSeats())
                 .seatNumbers(bookingDTO.getSeatNumbers())
@@ -57,7 +62,6 @@ public class BookingService {
                 .build();
 
         return bookingRepository.save(booking);
-
     }
 
     private Double calculateTotalAmount(Double price, Integer numberOfSeats) {

@@ -16,7 +16,6 @@ public class BookingDTO {
     private Double price;
     private BookingStatus status;
     private List<String> seatNumbers;
-    private UUID userId;
     private UUID showId;
 
 }

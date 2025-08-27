@@ -29,14 +29,15 @@ public class Show {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", nullable = false)
-    @JsonBackReference  // предотвращает сериализацию назад к movie
+   // @JsonBackReference  // предотвращает сериализацию назад к movie
     private Movie movie;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theater_id", nullable = false)
-    @JsonBackReference  // предотвращает сериализацию назад к theater
+    //@JsonBackReference  // предотвращает сериализацию назад к theater
     private Theater theater;
 
     @OneToMany(mappedBy = "show", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Booking> bookings;
 }

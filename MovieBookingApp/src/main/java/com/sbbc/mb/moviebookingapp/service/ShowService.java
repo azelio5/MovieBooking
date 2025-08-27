@@ -1,6 +1,7 @@
 package com.sbbc.mb.moviebookingapp.service;
 
 import com.sbbc.mb.moviebookingapp.dto.ShowDTO;
+import com.sbbc.mb.moviebookingapp.dto.ShowResponseDTO;
 import com.sbbc.mb.moviebookingapp.entity.Booking;
 import com.sbbc.mb.moviebookingapp.entity.Movie;
 import com.sbbc.mb.moviebookingapp.entity.Show;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.sbbc.mb.moviebookingapp.util.Util.applyIfNotNull;
 
@@ -29,10 +31,11 @@ public class ShowService {
         this.theaterRepository = theaterRepository;
     }
 
-    public Show createShow(ShowDTO showDTO) {
-
-        Movie movie = movieRepository.findById(showDTO.getMovieId()).orElseThrow(() -> new NotFoundException("Movie not found with id: " + showDTO.getMovieId()));
-        Theater theater = theaterRepository.findById(showDTO.getTheaterId()).orElseThrow(() -> new NotFoundException("Theater not found with id: " + showDTO.getTheaterId()));
+    public ShowResponseDTO createShow(ShowDTO showDTO) {
+        Movie movie = movieRepository.findById(showDTO.getMovieId())
+                .orElseThrow(() -> new NotFoundException("Movie not found with id: " + showDTO.getMovieId()));
+        Theater theater = theaterRepository.findById(showDTO.getTheaterId())
+                .orElseThrow(() -> new NotFoundException("Theater not found with id: " + showDTO.getTheaterId()));
 
         Show show = Show.builder()
                 .showTime(showDTO.getShowTime())
@@ -40,11 +43,31 @@ public class ShowService {
                 .movie(movie)
                 .theater(theater)
                 .build();
-        return showRepository.save(show);
+
+        Show savedShow = showRepository.save(show);
+        return toDTO(savedShow);
     }
 
-    public List<Show> getAllShows() {
-        return showRepository.findAll().stream().toList();
+    public List<ShowResponseDTO> getAllShows() {
+        return showRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ShowResponseDTO toDTO(Show show) {
+
+
+        return ShowResponseDTO.builder()
+                .showTime(show.getShowTime())
+                .price(show.getPrice())
+                .movieTitle(show.getMovie().getTitle())
+                .movieGenre(show.getMovie().getGenre())
+                .movieDescription(show.getMovie().getDescription())
+                .movieDuration(show.getMovie().getDuration())
+                .movieLanguage(show.getMovie().getLanguage())
+                .theaterName(show.getTheater().getName())
+                .theaterLocation(show.getTheater().getLocation()).build();
     }
 
     public List<Show> getAllShowsByMovie(String movie) {

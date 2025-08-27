@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwN
 
 POST http://localhost:8080/api/show/createshow
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYxNDAzNDcsImV4cCI6MTc1NjE0Mzk0N30.RG1MwI3yf_3abZPLcBiEXCISqhyGvGxhRWHWizS0Iv4
 
 {
   "showTime": "2025-08-24T08:00",
@@ -71,4 +71,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwN
 ### Get all shows
 
 GET http://localhost:8080/api/show/allshows
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYwNjEyOTcsImV4cCI6MTc1NjA2NDg5N30.Rl1GXr9pZhE9Ros_fnFANQ3rGf4s-C6H36DprZ_uluA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhemVsaW8iLCJpYXQiOjE3NTYxNDAzNDcsImV4cCI6MTc1NjE0Mzk0N30.RG1MwI3yf_3abZPLcBiEXCISqhyGvGxhRWHWizS0Iv4
+
+### Add Booking
+
+POST http://localhost:8080/api/booking/addbooking
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbnZhciBBbGVrcGVyb3YiLCJpYXQiOjE3NTYxNDE2MTksImV4cCI6MTc1NjE0NTIxOX0.QuuA25OVh3z0Fm26iHYtfKfnpAwmo4ccinhYdTvp5_I
+
+{
+  "numberOfSeats": 3,
+  "seatNumbers": ["A1", "A2", "D1"],
+  "showId": "eac11ea6-734f-4573-95c5-22cb47d19150"
+}
+
+### Confirm booking
+
+PUT http://localhost:8080/api/booking/ea608470-412e-4cd4-a7bd-e9a104e80c85/confirm
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbnZhciBBbGVrcGVyb3YiLCJpYXQiOjE3NTYxNDE2MTksImV4cCI6MTc1NjE0NTIxOX0.QuuA25OVh3z0Fm26iHYtfKfnpAwmo4ccinhYdTvp5_I

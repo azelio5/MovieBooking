@@ -1,6 +1,7 @@
 package com.sbbc.mb.moviebookingapp.controller;
 
 import com.sbbc.mb.moviebookingapp.dto.ShowDTO;
+import com.sbbc.mb.moviebookingapp.dto.ShowResponseDTO;
 import com.sbbc.mb.moviebookingapp.entity.Show;
 import com.sbbc.mb.moviebookingapp.service.ShowService;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,12 @@ public class ShowController {
     }
 
     @PostMapping("/createshow")
-    public ResponseEntity<Show> createShow(@RequestBody ShowDTO showDTO) {
+    public ResponseEntity<ShowResponseDTO> createShow(@RequestBody ShowDTO showDTO) {
         return ResponseEntity.ok(showService.createShow(showDTO));
     }
 
     @GetMapping("/allshows")
-    public ResponseEntity<List<Show>> getAllShows(){
+    public ResponseEntity<List<ShowResponseDTO>> getAllShows() {
         return ResponseEntity.ok(showService.getAllShows());
     }
 
